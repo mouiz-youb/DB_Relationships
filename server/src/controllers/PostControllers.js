@@ -73,7 +73,12 @@ const ListPost =async(req,res)=>{
     try {
         const All_Post = await prisma.post.findMany({
             include:{
-                author:true , comments:true
+                author:true ,  // show post author
+                comments:{
+                    include:{
+                        author:true // show the user who wrote the comments 
+                    }
+                }
             }
         })
         res.status(200).json({
