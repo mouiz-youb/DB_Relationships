@@ -64,9 +64,22 @@ const LogInController =async(req, res)=>{
                 msg:"Incorrect Password try again "
             })
         }
-        
+        // generate token 
+        const  accessToken = signinAccessToken({userId :existingUser.id})
+        const  refreshToken = signinRefreshToken({userId :existingUser.id})
+        // set resfresh token to cookie 
+        res.cookie("refresToekn", refreshToken , refreshTokenCookieOptions())
+        res.json({
+            msg:"Your loging successfuly",
+            accessToken,
+            user:{
+                id: existingUser.id , 
+                username :existingUser.username,
+                email:existingUser.email
+            }
+        })
     } catch (error) {
-        
+        res.status(500).json({ msg: error.message });
     }
 }
 export  {LogInController , SignUpController}
