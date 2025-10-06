@@ -66,8 +66,8 @@ const LogInController = async (req, res) => {
         }
 
         // Generate tokens
-        const accessToken = signinAccessToken({ userId: existingUser.id });
-        const refreshToken = signinRefreshToken({ userId: existingUser.id });
+        const accessToken = signinAccessToken(existingUser);
+        const refreshToken = signinRefreshToken(existingUser);
 
         // Optionally: save refreshToken in DB for security
         // await prisma.refreshToken.create({ data: { token: refreshToken, userId: existingUser.id } })
