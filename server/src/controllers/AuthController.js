@@ -14,20 +14,20 @@ const SignUpController =async(req, res)=>{
     }
     try {
         // check if the user is already have account 
-        const existingUser = prisma.user.findUnique({
-            data:{
+        const existingUser = await prisma.user.findUnique({
+            where:{
                 email
             }
         })
-        if(!existingUser){
+        if(existingUser){
             return res.status(400).json({
                 msg:"User already existe try with another email"
             })
         }
         // hash the password 
-        const hashedPassword = hashPassword(password)
+        const hashedPassword = await hashPassword(password)
         // create the user 
-        const NewUser = prisma.user.create({
+        const NewUser = await prisma.user.create({
             data:{
                 email , password :hashedPassword , username 
             }
@@ -40,46 +40,77 @@ const SignUpController =async(req, res)=>{
          res.status(500).json({ msg: error.message });
     }
 }
-const LogInController =async(req, res)=>{
-    const  {email , password} = req.body
-     if( !email  || !password){
-        return res.status(400).json({
-            msg:"All fields are required"
-        })
+const LogInController = async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ msg: "All fields are required" });
     }
+
     try {
+        // Check if user exists
         const existingUser = await prisma.user.findUnique({
-            data:{
-                email
-            }
-        })
-        if(!existingUser){
-            return res.status(400).json({
-                msg:"You don't have account try signup first "
-            })
+            where: { email }
+        });
+
+        if (!existingUser) {
+            return res.status(404).json({
+                msg: "No account found with this email. Please sign up first."
+            });
         }
-        const CorrectPassword = await comparePassword(password , existingUser.password)
-        if(!CorrectPassword){
-            return res.status(400).json({
-                msg:"Incorrect Password try again "
-            })
+
+        // Compare passwords
+        const correctPassword = await comparePassword(password, existingUser.password);
+        if (!correctPassword) {
+            return res.status(401).json({ msg: "Incorrect password" });
         }
-        // generate token 
-        const  accessToken = signinAccessToken({userId :existingUser.id})
-        const  refreshToken = signinRefreshToken({userId :existingUser.id})
-        // set resfresh token to cookie 
-        res.cookie("refresToekn", refreshToken , refreshTokenCookieOptions())
+
+        // Generate tokens
+        const accessToken = signinAccessToken({ userId: existingUser.id });
+        const refreshToken = signinRefreshToken({ userId: existingUser.id });
+
+        // Optionally: save refreshToken in DB for security
+        // await prisma.refreshToken.create({ data: { token: refreshToken, userId: existingUser.id } })
+
+        // Set refresh token cookie
+        res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions());
+
+        // Send response
         res.json({
-            msg:"Your loging successfuly",
+            msg: "Login successful",
             accessToken,
-            user:{
-                id: existingUser.id , 
-                username :existingUser.username,
-                email:existingUser.email
+            user: {
+                id: existingUser.id,
+                username: existingUser.username,
+                email: existingUser.email
             }
-        })
+        });
+
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
+};
+
+const Logout =async(req,res )=>{
+    res.clearCookie("refreshToken", refreshTokenCookieOptions());
+    res.json({
+        msg:"Logged out successfully"
+    })
 }
-export  {LogInController , SignUpController}
+const  refreshToken =async(req,res)=>{
+    const token = req.cookie.refreshToken
+    if(!token) return res.status(401).json({ msg: "No refresh token" });
+    try {
+        const payload =verifyRefreshToken(token)
+        const user =  await prisma.user.findUnique({
+            where:{
+                id:payload.userId
+            }
+        })
+        const  accessToken = signinAccessToken({userId:user.id})
+        res.json({accessToken})
+    } catch (error) {
+         res.status(403).json({ msg: "Invalid or expired refresh token" });
+    }
+}
+export  {LogInController , SignUpController , Logout , refreshToken}

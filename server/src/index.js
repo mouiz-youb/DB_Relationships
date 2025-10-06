@@ -1,8 +1,10 @@
 import express from "express"
+import cookieParser from "cookie-parser";
 import PostRouter from "./router/PostRouter.js"
 import AuthRouter from "./router/AuthRouter.js"
 const app = express()
 app.use(express.json())
+app.use(cookieParser());
 app.use("/post",PostRouter)
 app.use("/auth",AuthRouter)
 const PORT = 3000 
