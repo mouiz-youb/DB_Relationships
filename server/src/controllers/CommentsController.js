@@ -1,21 +1,31 @@
 import prisma from "../utils/db.js"
+//  "content":"comment one for the post one ",
+//     "postId":1
 const CreateComment =async(req,res)=>{
     const {content , postId }= req.body
     try {
         const userId = req.user.id
-        const New_Comment= prisma.comment.create({
+        // Make sure req.user exists
+        if (!req.user || !req.user.id) {
+        return res.status(401).json({ msg: "Unauthorized: no user found" })
+        }
+        const New_Comment= await prisma.comment.create({
             data:{
                 content , 
-                postId:parseInt(postId),
-                authorId:userId
-            } 
+                postId:Number(postId),
+                authorId:Number(userId)
+            } ,
+            include: {
+                author: true, // so you can see user info too
+                post: true
+            }
         })
         res.status(201).json({
             msg:"Comment created successfully",
             New_Comment
         })
     } catch (error) {
-        es.status(500).json({ msg: "Error creating comment", error: error.message });
+        res.status(500).json({ msg: "Error creating comment", error: error.message });
     }
 
 }

@@ -7,9 +7,14 @@ const requireToken = (req, res, next) => {
       return res.status(401).json({ msg: "Unauthorized" });
     }
 
-    const token = authHeader.split(" ")[1]; // ✅ Correct split
-    const payload = verifyAccessToken(token); // ✅ Declare payload
-    req.user = payload; // attach decoded user info (e.g., userId, email)
+    const token = authHeader.split(" ")[1];
+    const payload = verifyAccessToken(token);
+
+    // ✅ Attach only clean data
+    req.user = {
+      id: payload.id,
+      email: payload.email,
+    };
 
     next();
   } catch (error) {
