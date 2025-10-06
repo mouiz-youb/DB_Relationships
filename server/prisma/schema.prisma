@@ -27,7 +27,7 @@ model User {
 }
 model Post {
   id Int @id @default(autoincrement())
-  tilte String
+  title String
   content String
   createAt DateTime @default(now())
   updateAt DateTime @default(now())

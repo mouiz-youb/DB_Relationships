@@ -1,7 +1,7 @@
 import {  signinAccessToken,
     signinRefreshToken,
     verifyRefreshToken,
-    refreshTokenCookieOptions,hashPassword , comparePassword} from "../utils/Token.js"
+    refreshTokenCookieOptions,hashPassword , comparePassword , hashToken} from "../utils/Token.js"
 import prisma from "../utils/db.js"
 import bcrypt from "bcryptjs";
 
@@ -71,7 +71,12 @@ const LogInController = async (req, res) => {
 
         // Optionally: save refreshToken in DB for security
         // await prisma.refreshToken.create({ data: { token: refreshToken, userId: existingUser.id } })
-
+        // set the refresh token inside the user model 
+        const hashedRT = await hashToken(refreshToken);
+        await prisma.user.update({
+            where:{id:existingUser.id},
+            data:{hashedRefreshToken:hashedRT}
+        })
         // Set refresh token cookie
         res.cookie("refreshToken", refreshToken, refreshTokenCookieOptions());
 
@@ -90,7 +95,6 @@ const LogInController = async (req, res) => {
         res.status(500).json({ msg: error.message });
     }
 };
-
 const Logout =async(req,res )=>{
     res.clearCookie("refreshToken", refreshTokenCookieOptions());
     res.json({
