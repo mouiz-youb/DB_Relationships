@@ -20,21 +20,24 @@ model User {
   password String 
   hashedRefreshToken String? 
   createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt DateTime @updatedAt
   // Relations 
-  post Post [] // 1user -> have many posts 
+  posts Post [] // 1user -> have many posts 
   comments Comment[]  // 1 user -> have many comments
+  likes Like[] // user ->have many likes 
+  notifications Notification[] // user -> have many notification 
 }
 model Post {
   id Int @id @default(autoincrement())
   title String
   content String
   createAt DateTime @default(now())
-  updateAt DateTime @default(now())
+  updateAt DateTime @updatedAt
   // Relations 
   authorId Int // foriegn key 
   author User @relation(fields: [authorId], references: [id])  // post belong to one user 
   comments Comment[] // 1 post -> have many comments 
+  likes Like[]
 }
 model Comment{
   id Int @id @default(autoincrement())
@@ -45,6 +48,25 @@ model Comment{
   postId Int 
   author User @relation(fields: [authorId], references: [id]) // comment ->belogn to one User 
   post Post @relation(fields: [postId],references: [id])  // cooment -> belong to one Post 
+}
+model Like {
+  id Int @id  @default(autoincrement())
+  userId Int 
+  postId Int 
+  createAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
+  post Post @relation(fields: [postId], references: [id])
+  
+  @@unique([userId, postId])
+}
+model Notification {
+  id Int @id @default(autoincrement())
+  userId Int
+  type String 
+  payload Json 
+  read Boolean
+  createAt DateTime @default(now())
+  user User @relation(fields: [userId], references: [id])
 }
 
 
