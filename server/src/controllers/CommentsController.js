@@ -58,10 +58,23 @@ const DeleteComment =async(req,res)=>{
 }
 const ListComment =async(req,res)=>{
     const {postId}= req.params
+    // check if the postId if exist or not 
+    if(!postId){
+        return res.status(400).json({
+            msg:"PostId parameter is require "
+        })
+    }
+    const PostIdIsNumber = Number(postId)
+    if(Number.isNaN(PostIdIsNumber)){
+        return res.status(400).json({
+            msg:"postId must be a number try again"
+        })
+    }
     try {
-        const All_Commnets = prisma.comment.findMany({
-            where:{id :parseInt(postId)},
-            include:{author:true}
+        const All_Commnets =await  prisma.comment.findMany({
+            where:{postId:PostIdIsNumber}, // <- filter by postId 
+            include:{author:true}, // Include author insfo
+            orderBy:{createAt:"desc"} // optionnal :newest first
         })
         res.json({
             msg:"Comments lisling successfully ",
