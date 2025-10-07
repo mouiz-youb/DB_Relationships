@@ -5,6 +5,8 @@ import {Server} from "socket.io"
 import PostRouter from "./router/PostRouter.js"
 import AuthRouter from "./router/AuthRouter.js"
 import CommentRouter from "./router/CommentsRouter.js"
+
+import { swaggerUi, swaggerSpec } from "./swagger.js";
 const app = express()
 const PORT = 3000  
 app.use(express.json())
@@ -21,6 +23,7 @@ const io = new Server(server , {
         method:["GET","POST"]
     }
 })
+export {io}
 io.on("connection",(socket)=>{
     console.log(`A user connected ${socket.id}`)
     // listen for client msg 
@@ -34,7 +37,10 @@ io.on("connection",(socket)=>{
         console.log(`User disconnected ${socket.id}`)
     })
 })
+// -------------swagger ui-----------------
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // ------------------------------
+
 
 server.listen(PORT, ()=>{
     console.log(`🚀The server is listen to port ${PORT}`)

@@ -1,6 +1,5 @@
 import prisma from "../utils/db.js"
-//  "content":"comment one for the post one ",
-//     "postId":1
+import {io} from "../index.js"
 const CreateComment =async(req,res)=>{
     const {content , postId }= req.body
     try {
@@ -20,9 +19,20 @@ const CreateComment =async(req,res)=>{
                 post: true
             }
         })
+
+        // 🔥emit event to all clients 
+        io.emit("commentCreated",New_Comment)
         res.status(201).json({
             msg:"Comment created successfully",
-            New_Comment
+            comment :{
+                id :New_Comment.id,
+                content:New_Comment.content,
+                postId :New_Comment.postId,
+                author:{
+                    username :New_Comment.author.username,
+                    email:New_Comment.author.email
+                }
+            }
         })
     } catch (error) {
         res.status(500).json({ msg: "Error creating comment", error: error.message });
@@ -71,14 +81,30 @@ const ListComment =async(req,res)=>{
         })
     }
     try {
-        const All_Commnets =await  prisma.comment.findMany({
+        const All_Comments =await  prisma.comment.findMany({
             where:{postId:PostIdIsNumber}, // <- filter by postId 
-            include:{author:true}, // Include author insfo
+            include:{author:{
+                select:{
+                    username:true,
+                    email:true
+                }
+            }}, // Include author insfo
             orderBy:{createAt:"desc"} // optionnal :newest first
         })
+        const formattedComments = All_Comments.map(comment => ({
+            id: comment.id,
+            content: comment.content,
+            createAt: comment.createAt,
+            postId: comment.postId,
+            author: {
+                username: comment.author.username,
+                email: comment.author.email
+            }
+    }));
         res.json({
             msg:"Comments lisling successfully ",
-            All_Commnets
+            count: formattedComments.length,
+            comments: formattedComments
         })
     } catch (error) {
          res.status(500).json({ msg: "Error fetching comments", error: error.message });
