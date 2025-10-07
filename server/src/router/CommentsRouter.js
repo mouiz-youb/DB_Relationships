@@ -11,5 +11,5 @@ router.put("/update/:id",requireToken, UpdateComment)
 router.delete("/delete/:id",requireToken , DeleteComment)
 
 // list all post 
-router.get("/list", ListComment)
+router.get("/list/:postId", ListComment)
 export default router 
