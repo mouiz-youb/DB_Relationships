@@ -21,6 +21,7 @@ const io = new Server(server , {
         method:["GET","POST"]
     }
 })
+export {io}
 io.on("connection",(socket)=>{
     console.log(`A user connected ${socket.id}`)
     // listen for client msg 
