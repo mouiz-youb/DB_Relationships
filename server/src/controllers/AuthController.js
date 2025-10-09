@@ -102,7 +102,7 @@ const Logout =async(req,res )=>{
     })
 }
 const  refreshToken =async(req,res)=>{
-    const token = req.cookie.refreshToken
+    const token = req.cookies.refreshToken
     if(!token) return res.status(401).json({ msg: "No refresh token" });
     try {
         const payload =verifyRefreshToken(token)
