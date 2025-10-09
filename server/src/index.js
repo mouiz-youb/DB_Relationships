@@ -5,17 +5,30 @@ import {Server} from "socket.io"
 import PostRouter from "./router/PostRouter.js"
 import AuthRouter from "./router/AuthRouter.js"
 import CommentRouter from "./router/CommentsRouter.js"
-
+import cors from "cors"
 import { swaggerUi, swaggerSpec } from "./swagger.js";
+
+// -------------express server ------------------------
 const app = express()
-const PORT = 3000  
+const Rest_PORT = 3000
+app.use(
+  cors({
+    origin: "http://localhost:5173", // React client
+    credentials: true, // allow cookies/authorization headers
+  })
+);
+
 app.use(express.json())
 app.use(cookieParser());
 // routers for the apps 
 app.use("/post",PostRouter)
 app.use("/auth",AuthRouter)
 app.use("/comment",CommentRouter)
+app.listen(Rest_PORT, ()=>{
+    console.log(`🚀The Rest api  server is listen to port ${Rest_PORT}`)
+})
 // ------------socket server------------------
+const Socket_Port = 400   
 const server = http.createServer(app)
 const io = new Server(server , {
     cors :{
@@ -42,6 +55,6 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // ------------------------------
 
 
-server.listen(PORT, ()=>{
-    console.log(`🚀The server is listen to port ${PORT}`)
+io.listen(Socket_Port, ()=>{
+    console.log(`🚀The  Socket.IO server is listen to port ${Socket_Port}`)
 })

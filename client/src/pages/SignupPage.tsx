@@ -1,11 +1,19 @@
-import React , {useState} from 'react'
+import  {useState} from 'react'
 import { Link } from 'react-router-dom'
+import { UseSignup } from '../Hooks/useSignup'
 function SignupPage() {
-  const [usename, setUsename] = useState("")
+  const signup  = UseSignup()
+  const [username, setUsename] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const handleSubmit =()=>{
-
+  
+  const handleSubmit =async(e:any)=>{
+    e.preventDefault()
+    const user ={
+      email , username , password 
+    }
+    console.log(user)
+    await signup(email , username , password)
   }
   return (
     <div className="w-full h-full flex justify-center items-center flex-col">
