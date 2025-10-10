@@ -24,7 +24,13 @@ export const useAuthStore = create<AuthState>((set) => ({
     accessToken: null,
 
     // Save user + token
-    setAuth: (user, accessToken) => {set({ user, accessToken })},
+    setAuth: (user, accessToken) => {
+        // store the state 
+        set({ user, accessToken })
+        // persist in local storage 
+        localStorage.setItem("user",JSON.stringify(user))
+        localStorage.setItem("accesToken",accessToken)
+    },
 
   // Logout clear
     clearAuth: () => {
