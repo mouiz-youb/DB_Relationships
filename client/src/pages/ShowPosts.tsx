@@ -8,11 +8,11 @@ function ShowPosts() {
   }, [])
   console.log(user)
   return (
-    <div>
+    <div className='flex justify-center items-center flex-col gap-5  text-2xl'>
       <h1>show post </h1>
-      <h1> {user?.email} </h1>
-      <h1> {user?.id} </h1>
-      <h1> {user?.username} </h1>
+      <h1> user Email :{user?.email} </h1>
+      <h1> user id  :{user?.id} </h1>
+      <h1> user name :{user?.username} </h1>
       <h1></h1>
       <h1></h1>
     </div>

@@ -28,7 +28,7 @@ export const useLogin = () => {
       if (msg === "Login successful") {
         toast.success(msg);
         setAuth(userData, accessToken);
-        navigate("/post");
+        navigate("/listPosts");
       }
     } catch (error: any) {
       const errMsg = error.response?.data?.msg || "Login failed";
