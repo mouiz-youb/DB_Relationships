@@ -1,11 +1,9 @@
-import React, { useEffect } from 'react'
-import useAuthStore from "../Store/UserStore"; 
+import  { useEffect } from 'react'
+import useAuthStore from "../Store/UserStore";
+import { useInitAuth } from '../Hooks/useInitAuth'; 
 function ShowPosts() {
   const user = useAuthStore((state)=>state.user)
-  const loadAuthFromStorage = useAuthStore((state)=>state.loadAuthFromStorage)
-   useEffect(() => {
-    loadAuthFromStorage()
-  }, [])
+  useInitAuth()
   console.log(user)
   return (
     <div className='flex justify-center items-center flex-col gap-5  text-2xl'>
@@ -20,3 +18,20 @@ function ShowPosts() {
 }
 
 export default ShowPosts
+
+
+// import { useEffect } from "react";
+// import { useAuth } from "../../Zustend-store/AuthStore.js";
+// export const useInitializeAuth = () => {
+//   const login = useAuth((state) => state.login);
+//   const logout = useAuth((state) => state.logout);
+//   useEffect(() => {
+//     const storeUser = JSON.parse(localStorage.getItem("userData"));
+//     const storeToken = JSON.parse(localStorage.getItem("token"));
+//     if (storeUser && storeToken) {
+//       login(storeUser);
+//     } else {
+//       logout();
+//     }
+//   }, [login, logout]);
+// };

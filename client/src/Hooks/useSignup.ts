@@ -1,5 +1,6 @@
 import  {toast} from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
+import axios from "axios"
 import api from "../lib/api"
 // import  {useAuthStore} from "../Store/UserStore"
 export const UseSignup =()=>{
@@ -7,7 +8,7 @@ export const UseSignup =()=>{
     // const setAuth= useAuthStore((state)=>state.setAuth)
     const signup =async(email:String , username:String , password:String)=>{
         try {
-            const response = await api.post("/auth/signup",{
+            const response = await axios.post("http://localhost:3000/auth/signup",{
                 username , email , password 
             })
             const msg = response.data.msg 
