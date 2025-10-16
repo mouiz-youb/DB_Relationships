@@ -1,14 +1,19 @@
 import { useEffect } from "react";
+import api from "../lib/api"
 import UserStore from "../Store/UserStore"
 export const useInitAuth =()=>{
-    const user = UserStore((STATE)=>STATE.user)
+    const clearAuth  = UserStore((STATE)=>STATE.clearAuth )
     const setAuth = UserStore((STATE)=>STATE.setAuth)
     useEffect(()=>{
-        const storedUser = localStorage.getItem("user") 
-        const storedToken = localStorage.getItem("accesToken")
-        if(storedToken && storedUser){
-            const persetUser = JSON.parse(storedUser)
-            setAuth(persetUser , storedToken)
+        const initialize = async ()=>{
+            try {
+                const response = await api.post("/auth/refresh")
+                const {user , accessToken }= response.data
+                setAuth(user , accessToken)
+            } catch (error) {
+                clearAuth()
+            }
         }
-    },[setAuth])
+        initialize()
+    },[setAuth , clearAuth])
 }

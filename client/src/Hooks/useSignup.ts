@@ -8,7 +8,7 @@ export const UseSignup =()=>{
     // const setAuth= useAuthStore((state)=>state.setAuth)
     const signup =async(email:String , username:String , password:String)=>{
         try {
-            const response = await axios.post("http://localhost:3000/auth/signup",{
+            const response = await api.post("/auth/signup",{
                 username , email , password 
             })
             const msg = response.data.msg 
