@@ -27,7 +27,7 @@ export const  signinRefreshToken=(user )=>{
   );
 }
 export const  verifyRefreshToken  =(token )=>{
-    return jwt.verify(token, REFRESH_SECRET)
+    return  jwt.verify(token, REFRESH_SECRET)
 }
 export const hashToken = async(token)=>{
     const salt = await bcrypt.genSalt(10)
@@ -48,8 +48,8 @@ export const  refreshTokenCookieOptions=()=> {
   return {
     httpOnly: true,
     sameSite: "lax", // adjust for cross-site usage
-    // secure: true, // enable in production (HTTPS)
-    path: "/auth/refresh-token",
+    secure: false, // enable in production (HTTPS)
+    path: "/",
     // maxAge not set here since token itself has expiry; you can set cookie maxAge in ms if desired
   };
 }

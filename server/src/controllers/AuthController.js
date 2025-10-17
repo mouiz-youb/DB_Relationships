@@ -103,18 +103,20 @@ const Logout =async(req,res )=>{
 }
 const  refreshToken =async(req,res)=>{
     const token = req.cookies.refreshToken
+      console.log("Cookies received by server:", req.cookies);
     if(!token) return res.status(401).json({ msg: "No refresh token" });
     try {
         const payload =verifyRefreshToken(token)
         const user =  await prisma.user.findUnique({
             where:{
-                id:payload.userId
+                id:payload.id
             }
         })
         const  accessToken = signinAccessToken({userId:user.id})
         res.json({accessToken})
     } catch (error) {
          res.status(403).json({ msg: "Invalid or expired refresh token" });
+         console.log(error)
     }
 }
 export  {LogInController , SignUpController , Logout , refreshToken}
