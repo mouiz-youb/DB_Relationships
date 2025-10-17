@@ -18,11 +18,6 @@ export const UseSignup =()=>{
             if(msg === "All fields are required"){
                 toast.error(msg)
             }
-            // const userData ={
-            //     email :response.data.NewUser.email,
-            //     id : response.data.NewUser.id,
-            //     username: response.data.NewUser.username
-            // }
             if(msg ==="User registered successfully"){
                 toast.success(msg)
                 navigate("/login")
