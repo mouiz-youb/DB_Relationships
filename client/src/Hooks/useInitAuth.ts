@@ -7,7 +7,7 @@ export const useInitAuth =()=>{
     useEffect(()=>{
         const initialize = async ()=>{
             try {
-                const response = await api.post("/auth/refresh")
+                const response = await api.post("/auth/refreshToken")
                 const {user , accessToken }= response.data
                 setAuth(user , accessToken)
             } catch (error) {

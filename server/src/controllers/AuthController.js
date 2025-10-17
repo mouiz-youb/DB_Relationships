@@ -103,7 +103,7 @@ const Logout =async(req,res )=>{
 }
 const  refreshToken =async(req,res)=>{
     const token = req.cookies.refreshToken
-      console.log("Cookies received by server:", req.cookies);
+    //   console.log("Cookies received by server:", req.cookies);
     if(!token) return res.status(401).json({ msg: "No refresh token" });
     try {
         const payload =verifyRefreshToken(token)
@@ -113,7 +113,11 @@ const  refreshToken =async(req,res)=>{
             }
         })
         const  accessToken = signinAccessToken({userId:user.id})
-        res.json({accessToken})
+        res.json({accessToken , user:{
+            id :user.id , 
+            email :user.email, 
+            username :user.username
+        }})
     } catch (error) {
          res.status(403).json({ msg: "Invalid or expired refresh token" });
          console.log(error)
