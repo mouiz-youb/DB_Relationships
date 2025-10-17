@@ -113,7 +113,11 @@ const  refreshToken =async(req,res)=>{
             }
         })
         const  accessToken = signinAccessToken({userId:user.id})
-        res.json({accessToken})
+        res.json({accessToken , user:{
+            id :user.id , 
+            email :user.email, 
+            username :user.username
+        }})
     } catch (error) {
          res.status(403).json({ msg: "Invalid or expired refresh token" });
          console.log(error)
