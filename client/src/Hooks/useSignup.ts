@@ -1,6 +1,6 @@
 import  {toast} from "react-hot-toast"
 import { useNavigate } from "react-router-dom"
-import axios from "axios"
+// import axios from "axios"
 import api from "../lib/api"
 // import  {useAuthStore} from "../Store/UserStore"
 export const UseSignup =()=>{

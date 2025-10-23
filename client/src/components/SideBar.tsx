@@ -1,4 +1,3 @@
-import React from 'react'
 import SideBarLinks from './SideBarLinks'
 import { IoIosSend } from "react-icons/io";
 import { IoIosNotifications } from "react-icons/io";
