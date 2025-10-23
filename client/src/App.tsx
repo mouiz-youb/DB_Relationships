@@ -6,7 +6,7 @@ import CreatePost from './pages/CreatePost';
 import ShowPosts from './pages/ShowPosts';
 import SideBar from "./components/SideBar";
 import "./App.css";
-
+// import {}
 function App() {
   return (
     <div className='w-screen h-screen grid grid-cols-15 grid-rows-1  '>
