@@ -53,7 +53,9 @@ io.on("connection",(socket)=>{
 // -------------swagger ui-----------------
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // ------------------------------
-
+app.get("/",(req,res)=>{
+    res.send(`hello from social media app`)
+})
 
 io.listen(Socket_Port, ()=>{
     console.log(`🚀The  Socket.IO server is listen to port ${Socket_Port}`)
