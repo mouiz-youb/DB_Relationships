@@ -7,7 +7,7 @@ import AuthRouter from "./router/AuthRouter.js"
 import CommentRouter from "./router/CommentsRouter.js"
 import cors from "cors"
 import { swaggerUi, swaggerSpec } from "./swagger.js";
-
+import prisma from "./utils/db.js"
 // -------------express server ------------------------
 const app = express()
 const Rest_PORT = 3000
@@ -37,19 +37,19 @@ const io = new Server(server , {
     }
 })
 export {io}
-io.on("connection",(socket)=>{
-    console.log(`A user connected ${socket.id}`)
-    // listen for client msg 
-    socket.on("chat_msg",(msg)=>{
-        console.log(`Msg from client ${msg}`)
-        // send msg back to all connected clients 
-        io.emit("chat_msg",msg)
-    })
-    // handel disconnection
-    socket.on("disco ",()=>{
-        console.log(`User disconnected ${socket.id}`)
-    })
-})
+// io.on("connection",(socket)=>{
+//     console.log(`A user connected ${socket.id}`)
+//     // listen for client msg 
+//     socket.on("chat_msg",(msg)=>{
+//         console.log(`Msg from client ${msg}`)
+//         // send msg back to all connected clients 
+//         io.emit("chat_msg",msg)
+//     })
+//     // handel disconnection
+//     socket.on("disco ",()=>{
+//         console.log(`User disconnected ${socket.id}`)
+//     })
+// })
 // -------------swagger ui-----------------
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 // ------------------------------
@@ -57,6 +57,26 @@ app.get("/",(req,res)=>{
     res.send(`hello from social media app`)
 })
 
-io.listen(Socket_Port, ()=>{
-    console.log(`The  Socket.IO server is listen to port ${Socket_Port}`)
-})
+// io.listen(Socket_Port, ()=>{
+//     console.log(`The  Socket.IO server is listen to port ${Socket_Port}`)
+// })
+
+// start server 
+const StartServer =async()=>{
+    try {
+        console.log(`⏳ Checking database connection...`)
+        await prisma.$connect()
+        console.log("✅ Database connected successfully!");
+        const PORT = process.env.PORT || 3000 
+        app.listen(PORT , ()=>{
+            console.log(`🚀 Server running on port ${PORT}`);
+        })
+    } catch (error) {
+        console.log(`❌ Failed to connect to database`)
+        console.error(error.message)
+        await prisma.$disconnect()
+        process.exit(1)
+    }
+}
+
+StartServer()
