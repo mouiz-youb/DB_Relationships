@@ -19,7 +19,6 @@ function App() {
           <Route path="/createPost" element={<CreatePost />} />
           <Route path="/listPosts" element={<ShowPosts />} />
           <Route path="/" element={<DashBoard />} />
-
         </Routes>
       </div>
     </div>

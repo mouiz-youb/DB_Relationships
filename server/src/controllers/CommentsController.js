@@ -1,5 +1,5 @@
 import prisma from "../utils/db.js"
-import {io} from "../index.js"
+// import {io} from "../index.js"
 const CreateComment =async(req,res)=>{
     const {content , postId }= req.body
     try {
@@ -21,7 +21,7 @@ const CreateComment =async(req,res)=>{
         })
 
         // 🔥emit event to all clients 
-        io.emit("commentCreated",New_Comment)
+        // io.emit("commentCreated",New_Comment)
         res.status(201).json({
             msg:"Comment created successfully",
             comment :{

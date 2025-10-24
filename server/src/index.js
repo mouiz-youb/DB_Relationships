@@ -24,19 +24,19 @@ app.use(cookieParser());
 app.use("/post",PostRouter)
 app.use("/auth",AuthRouter)
 app.use("/comment",CommentRouter)
-app.listen(Rest_PORT, ()=>{
-    console.log(`The Rest api  server is listen to port ${Rest_PORT}`)
-})
+// app.listen(Rest_PORT, ()=>{
+//     console.log(`The Rest api  server is listen to port ${Rest_PORT}`)
+// })
 // ------------socket server------------------
 const Socket_Port = 400   
-const server = http.createServer(app)
-const io = new Server(server , {
-    cors :{
-        origin:"http://localhost:5173",
-        method:["GET","POST"]
-    }
-})
-export {io}
+// const server = http.createServer(app)
+// const io = new Server(server , {
+//     cors :{
+//         origin:"http://localhost:5173",
+//         method:["GET","POST"]
+//     }
+// })
+// export {io}
 // io.on("connection",(socket)=>{
 //     console.log(`A user connected ${socket.id}`)
 //     // listen for client msg 
