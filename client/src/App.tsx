@@ -4,6 +4,7 @@ import SignupPage from "./pages/SignupPage";
 import LoginPage from './pages/LoginPage';
 import CreatePost from './pages/CreatePost';
 import ShowPosts from './pages/ShowPosts';
+import DashBoard from "./pages/DashBoard"
 import SideBar from "./components/SideBar";
 import "./App.css";
 // import {}
@@ -17,6 +18,8 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/createPost" element={<CreatePost />} />
           <Route path="/listPosts" element={<ShowPosts />} />
+          <Route path="/" element={<DashBoard />} />
+
         </Routes>
       </div>
     </div>

@@ -25,7 +25,7 @@ app.use("/post",PostRouter)
 app.use("/auth",AuthRouter)
 app.use("/comment",CommentRouter)
 app.listen(Rest_PORT, ()=>{
-    console.log(`🚀The Rest api  server is listen to port ${Rest_PORT}`)
+    console.log(`The Rest api  server is listen to port ${Rest_PORT}`)
 })
 // ------------socket server------------------
 const Socket_Port = 400   
@@ -58,5 +58,5 @@ app.get("/",(req,res)=>{
 })
 
 io.listen(Socket_Port, ()=>{
-    console.log(`🚀The  Socket.IO server is listen to port ${Socket_Port}`)
+    console.log(`The  Socket.IO server is listen to port ${Socket_Port}`)
 })
