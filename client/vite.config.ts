@@ -5,5 +5,5 @@ import tailwindcss from '@tailwindcss/vite'
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
-  base: '/DB_Relationships', // <-- ADD THIS LINE
+  base: '/', // <-- ADD THIS LINE
 })
